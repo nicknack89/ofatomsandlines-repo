@@ -1,2 +1,2 @@
 # ofatomsandlines
-All the apllications for atomsandlines
+All the applications for atomsandlines

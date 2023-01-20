@@ -101,9 +101,21 @@
         }
 
         function selectRandomImages() {
-            document.getElementById("head").src = "Entropy0" + (Math.floor(Math.random() * 9) + 1) + ".jpg";
-            document.getElementById("upper-body").src = "Entropy0" + (Math.floor(Math.random() * 9) + 1) + ".jpg";
-            document.getElementById("lower-body").src = "Entropy0" + (Math.floor(Math.random() * 9) + 1) + ".jpg";
+            let numbers = "123456789";
+            let image1_number = numbers[Math.floor(Math.random() * numbers.length)];
+            numbers = numbers.replace(image1_number, "");
+            let image2_number = numbers[Math.floor(Math.random() * numbers.length)];
+            numbers = numbers.replace(image2_number, "");
+            let image3_number = numbers[Math.floor(Math.random() * numbers.length)];
+            numbers = numbers.replace(image3_number, "");
+
+            // image1_number = (Math.floor(Math.random() * 9) + 1);
+            // image2_number = (Math.floor(Math.random() * 9) + 1); 
+            // image3_number = (Math.floor(Math.random() * 9) + 1); 
+
+            document.getElementById("head").src = "Entropy0" + image1_number + ".jpg";
+            document.getElementById("upper-body").src = "Entropy0" + image2_number + ".jpg";
+            document.getElementById("lower-body").src = "Entropy0" + image3_number + ".jpg";
         }
 
         function calculateProportions(entered_height, height_of_head, height_of_upper, height_of_lower) {

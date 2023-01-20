@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Testing Personal postcard</title>
+    <title>Personal postcard</title>
     <style>
         /* CSS for styling the page */
         #height {
@@ -75,7 +75,11 @@
             entered_height = entered_height * factor;
             console.log("The entered height is:" + entered_height);
             console.log("---------------------------")
-            checkHeightInput(entered_height, factor);
+            var err_occurred  = checkHeightInput(entered_height, factor);
+            console.log(err_occurred)
+            if (err_occurred){
+                return;
+            }
             selectRandomImages();
             var height_of_head = window.getComputedStyle(document.getElementById("head")).getPropertyValue("height");
             var height_of_upper = window.getComputedStyle(document.getElementById("upper-body")).getPropertyValue("height");
@@ -89,9 +93,10 @@
             console.log(entered_height)
             if (entered_height < 60 * factor || entered_height > 220 * factor) {
                 document.getElementById("error-message").textContent = "Error: Value must be between 60 and 220";
-                return;
+                return 1;
             } else {
                 document.getElementById("error-message").textContent = "";
+                return 0;
             }
         }
 

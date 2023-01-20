@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Personal postcard</title>
+    <title>Testing Personal postcard</title>
     <style>
         /* CSS for styling the page */
         #height {
@@ -60,7 +60,7 @@
     <form>
         <label>Enter your height in cm:</label>
         <input type="text" id="height" name="height">
-        <input type="button" id="btn" value="Calculate" onclick="calculateProportions()">
+        <input type="button" id="btn" value="Calculate" onclick="startGenerate()">
     </form>
       <span id="error-message" style="color: red;"></span>
       <div id="proportion-image" style="font-size:0;">
@@ -69,84 +69,63 @@
         <img src="Entropy03.jpg" id="lower-body">
     <script>
         // JavaScript function to calculate body proportions and show the image
-        function calculateProportions() {
-            // factor for upscaling the image
+        function startGenerate() {
             const factor = 1;
-            // get height in cm and divide it by 10 for the printable result
             var entered_height = document.getElementById("height").value;
-            entered_height = entered_height * factor
-            
+            entered_height = entered_height * factor;
             console.log("The entered height is:" + entered_height);
             console.log("---------------------------")
-            // error message if the number is too small or to big
+            checkHeightInput(entered_height, factor);
+            selectRandomImages();
+            var height_of_head = window.getComputedStyle(document.getElementById("head")).getPropertyValue("height");
+            var height_of_upper = window.getComputedStyle(document.getElementById("upper-body")).getPropertyValue("height");
+            var height_of_lower = window.getComputedStyle(document.getElementById("lower-body")).getPropertyValue("height");
+            calculateProportions(entered_height, height_of_head, height_of_upper, height_of_lower);
+            cropImages();
+            moveGeneratedImages(entered_height);
+        }
+
+        function checkHeightInput(entered_height, factor) {
+            console.log(entered_height)
             if (entered_height < 60 * factor || entered_height > 220 * factor) {
                 document.getElementById("error-message").textContent = "Error: Value must be between 60 and 220";
                 return;
             } else {
                 document.getElementById("error-message").textContent = "";
             }
+        }
 
-            // generate a random number and choose the image
+        function selectRandomImages() {
             document.getElementById("head").src = "Entropy0" + (Math.floor(Math.random() * 9) + 1) + ".jpg";
             document.getElementById("upper-body").src = "Entropy0" + (Math.floor(Math.random() * 9) + 1) + ".jpg";
             document.getElementById("lower-body").src = "Entropy0" + (Math.floor(Math.random() * 9) + 1) + ".jpg";
+        }
 
-            // get the height of the generated images
-            var height_of_head = window.getComputedStyle(document.getElementById("head")).getPropertyValue("height");
-            var height_of_upper = window.getComputedStyle(document.getElementById("upper-body")).getPropertyValue("height");
-            var height_of_lower = window.getComputedStyle(document.getElementById("lower-body")).getPropertyValue("height");
-
-            console.log("The height of head is:" + height_of_head);
-            console.log("The height of upper is:" + height_of_upper);
-            console.log("The height of lower is:" + height_of_lower);
-            console.log("---------------------------")
-            // get the correct proportions for each segment
+        function calculateProportions(entered_height, height_of_head, height_of_upper, height_of_lower) {
             prop_head = entered_height * 0.2;
             prop_upper_body = entered_height * 0.3;
             prop_lower_body= entered_height * 0.5;
-            
-            console.log("The proportions of head is:" + prop_head);
-            console.log("The proportions of upper is:" + prop_upper_body);
-            console.log("The proportions of lower is:" + prop_lower_body);
-            console.log("---------------------------")
-            // get height of the cropped image
             cropped_head = (parseInt(height_of_head, 10) - prop_head) / 2
             cropped_upper_body = (parseInt(height_of_upper, 10) - prop_upper_body) / 2
             cropped_lower_body = (parseInt(height_of_lower, 10) - prop_lower_body) / 2
+        }
 
-            console.log("The cropped image of head is:" + cropped_head);
-            console.log("The cropped image of upper is:" + cropped_upper_body);
-            console.log("The cropped image of lower is:" + cropped_lower_body);
-            console.log("---------------------------")
-            // crop the genrated images
+        function cropImages() {
             document.getElementById("head").style.clipPath = "inset(" + cropped_head + "px 0px " + cropped_head + "px 0px)";
             document.getElementById("upper-body").style.clipPath = "inset(" + cropped_upper_body + "px 0px  " + cropped_upper_body + "px 0px)";
             document.getElementById("lower-body").style.clipPath = "inset(" + cropped_lower_body + "px 0px " + cropped_lower_body + "px 0px)";
+        }
 
-
-            console.log(window.getComputedStyle(document.getElementById("head")).getPropertyValue("height"));
-            console.log(window.getComputedStyle(document.getElementById("upper-body")).getPropertyValue("height"));
-            console.log(window.getComputedStyle(document.getElementById("lower-body")).getPropertyValue("height"));
-            console.log("---------------------------")
+        function moveGeneratedImages(entered_height){
             var position_for_head = cropped_head;
             var position_for_upper = cropped_head + cropped_upper_body;
             var position_for_lower =  cropped_upper_body + cropped_lower_body;
-            
-            console.log("The moving position of head is:" + position_for_head);
-            console.log("The moving position of upper is:" + position_for_upper);
-            console.log("The moving position of lower is:" + position_for_lower);
-            console.log("---------------------------")
 
             document.getElementById("head").style.marginTop = "-" + position_for_head + "px";
             document.getElementById("upper-body").style.marginTop = "-" + position_for_upper + "px";
             document.getElementById("lower-body").style.marginTop = "-" + position_for_lower + "px";
 
-            console.log("The final image has a height of:" + entered_height);
-            console.log("---------------------------")
-
             document.getElementById("proportion-image").setAttribute('style', 'height: ' + entered_height + 'px')
-    
-
         }
     </script>
 </body>
